@@ -3,10 +3,8 @@ import os
 from copy import deepcopy
 from glob import glob
 from unittest import mock
-
 import numpy as np
 import tensorflow as tf
-
 
 def test_safe(func):
     """
@@ -20,15 +18,14 @@ def test_safe(func):
 
     return func_wrapper
 
-
 def _prevent_print(function, params):
     sys.stdout = open(os.devnull, "w")
     function(**params)
     sys.stdout = sys.__stdout__
 
-
 def _assert_tensor_shape(tensor, shape, display_name):
-    assert tf.assert_rank(tensor, len(shape), message='{} has wrong rank'.format(display_name))
+    assert tf.assert_rank(tensor, len(
+        shape), message='{} has wrong rank'.format(display_name))
 
     tensor_shape = tensor.get_shape().as_list() if len(shape) else []
 
@@ -37,11 +34,11 @@ def _assert_tensor_shape(tensor, shape, display_name):
     assert not wrong_dimension, \
         '{} has wrong shape.  Found {}'.format(display_name, tensor_shape)
 
-
 class TmpMock(object):
     """
     Mock a attribute.  Restore attribute when exiting scope.
     """
+
     def __init__(self, module, attrib_name):
         self.original_attrib = deepcopy(getattr(module, attrib_name))
         setattr(module, attrib_name, mock.MagicMock())
@@ -54,7 +51,6 @@ class TmpMock(object):
     def __exit__(self, type, value, traceback):
         setattr(self.module, self.attrib_name, self.original_attrib)
 
-
 @test_safe
 def test_load_vgg(load_vgg, tf_module):
     with TmpMock(tf_module.saved_model.loader, 'load') as mock_load_model:
@@ -66,7 +62,8 @@ def test_load_vgg(load_vgg, tf_module):
         test_vgg_layer4_out = tf.placeholder(tf.float32, name='layer4_out')
         test_vgg_layer7_out = tf.placeholder(tf.float32, name='layer7_out')
 
-        input_image, keep_prob, vgg_layer3_out, vgg_layer4_out, vgg_layer7_out = load_vgg(sess, vgg_path)
+        input_image, keep_prob, vgg_layer3_out, vgg_layer4_out, vgg_layer7_out = load_vgg(
+            sess, vgg_path)
 
         assert mock_load_model.called, \
             'tf.saved_model.loader.load() not called'
@@ -79,16 +76,17 @@ def test_load_vgg(load_vgg, tf_module):
         assert vgg_layer4_out == test_vgg_layer4_out, 'layer4_out is the wrong object'
         assert vgg_layer7_out == test_vgg_layer7_out, 'layer7_out is the wrong object'
 
-
 @test_safe
 def test_layers(layers):
     num_classes = 2
     vgg_layer3_out = tf.placeholder(tf.float32, [None, None, None, 256])
     vgg_layer4_out = tf.placeholder(tf.float32, [None, None, None, 512])
     vgg_layer7_out = tf.placeholder(tf.float32, [None, None, None, 4096])
-    layers_output = layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
+    layers_output = layers(vgg_layer3_out, vgg_layer4_out,
+                           vgg_layer7_out, num_classes)
 
-    _assert_tensor_shape(layers_output, [None, None, None, num_classes], 'Layers Output')
+    _assert_tensor_shape(
+        layers_output, [None, None, None, num_classes], 'Layers Output')
 
 
 @test_safe
@@ -98,17 +96,19 @@ def test_optimize(optimize):
     layers_output = tf.Variable(tf.zeros(shape))
     correct_label = tf.placeholder(tf.float32, [None, None, None, num_classes])
     learning_rate = tf.placeholder(tf.float32)
-    logits, train_op, cross_entropy_loss = optimize(layers_output, correct_label, learning_rate, num_classes)
+    logits, train_op, cross_entropy_loss = optimize(
+        layers_output, correct_label, learning_rate, num_classes)
 
     _assert_tensor_shape(logits, [2*3*4, num_classes], 'Logits')
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
-        sess.run([train_op], {correct_label: np.arange(np.prod(shape)).reshape(shape), learning_rate: 10})
-        test, loss = sess.run([layers_output, cross_entropy_loss], {correct_label: np.arange(np.prod(shape)).reshape(shape)})
+        sess.run([train_op], {correct_label: np.arange(
+            np.prod(shape)).reshape(shape), learning_rate: 10})
+        test, loss = sess.run([layers_output, cross_entropy_loss], {
+                              correct_label: np.arange(np.prod(shape)).reshape(shape)})
 
     assert test.min() != 0 or test.max() != 0, 'Training operation not changing weights.'
-
 
 @test_safe
 def test_train_nn(train_nn):
@@ -139,16 +139,22 @@ def test_train_nn(train_nn):
             'learning_rate': learning_rate}
         _prevent_print(train_nn, parameters)
 
-
 @test_safe
 def test_for_kitti_dataset(data_dir):
     kitti_dataset_path = os.path.join(data_dir, 'data_road')
-    training_labels_count = len(glob(os.path.join(kitti_dataset_path, 'training/gt_image_2/*_road_*.png')))
-    training_images_count = len(glob(os.path.join(kitti_dataset_path, 'training/image_2/*.png')))
-    testing_images_count = len(glob(os.path.join(kitti_dataset_path, 'testing/image_2/*.png')))
+    training_labels_count = len(
+        glob(os.path.join(kitti_dataset_path, 'training/gt_image_2/*_road_*.png')))
+    training_images_count = len(
+        glob(os.path.join(kitti_dataset_path, 'training/image_2/*.png')))
+    testing_images_count = len(
+        glob(os.path.join(kitti_dataset_path, 'testing/image_2/*.png')))
 
     assert not (training_images_count == training_labels_count == testing_images_count == 0),\
-        'Kitti dataset not found. Extract Kitti dataset in {}'.format(kitti_dataset_path)
-    assert training_images_count == 289, 'Expected 289 training images, found {} images.'.format(training_images_count)
-    assert training_labels_count == 289, 'Expected 289 training labels, found {} labels.'.format(training_labels_count)
-    assert testing_images_count == 290, 'Expected 290 testing images, found {} images.'.format(testing_images_count)
+        'Kitti dataset not found. Extract Kitti dataset in {}'.format(
+            kitti_dataset_path)
+    assert training_images_count == 289, 'Expected 289 training images, found {} images.'.format(
+        training_images_count)
+    assert training_labels_count == 289, 'Expected 289 training labels, found {} labels.'.format(
+        training_labels_count)
+    assert testing_images_count == 290, 'Expected 290 testing images, found {} images.'.format(
+        testing_images_count)
