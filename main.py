@@ -17,7 +17,6 @@ if not tf.test.gpu_device_name():
 else:
     print('Default GPU Device: {}'.format(tf.test.gpu_device_name()))
 
-
 def load_vgg(sess, vgg_path):
     """
     Load Pretrained VGG Model into TensorFlow.
@@ -43,9 +42,7 @@ def load_vgg(sess, vgg_path):
 
     return image_input, keep_prob, layer3_out, layer4_out, layer7_out
 
-
 tests.test_load_vgg(load_vgg, tf)
-
 
 def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     """
@@ -104,9 +101,7 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
                                                kernel_regularizer=tf.contrib.layers.l2_regularizer(regularized_l2))
     return second_upsample_x8
 
-
 tests.test_layers(layers)
-
 
 def optimize(nn_last_layer, correct_label, learning_rate, num_classes):
     """
@@ -130,9 +125,7 @@ def optimize(nn_last_layer, correct_label, learning_rate, num_classes):
     train_optimizer = optimizer.minimize(cross_entropy_loss)
     return logits, train_optimizer, cross_entropy_loss
 
-
 tests.test_optimize(optimize)
-
 
 def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_loss, input_image,
              correct_label, keep_prob, learning_rate):
@@ -159,10 +152,11 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
         for image, label in get_batches_fn(batch_size):
             # Training
              _, loss = sess.run([train_optimizer, cross_entropy_loss],
-                               feed_dict={input_image: image, correct_label: label, keep_prob: 0.5, learning_rate: 0.0009})                                keep_prob: 0.5, learning_rate: 0.0009})
-            print("Loss: = {:.3f}".format(loss))
-    print()
-
+                               feed_dict={input_image: image, correct_label: label, keep_prob: 0.5, learning_rate: 0.00001
+                                })
+        print("Loss: = {:.3f}".format(loss))
+        print()
+    print('Training finished')
 tests.test_train_nn(train_nn)
 
 def run():
