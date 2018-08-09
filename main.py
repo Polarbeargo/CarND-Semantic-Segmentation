@@ -185,7 +185,6 @@ def run():
         # TODO: Build NN using load_vgg, layers, and optimize function
         epochs= 50
         batch_size= 5
-        saver = tf.train.Saver()
 
         # TF placeholders
         correct_label= tf.placeholder(tf.int32, [None, None, None, num_classes], name='correct_label')
@@ -198,7 +197,7 @@ def run():
         layer_output= layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
         
         # Creating loss and optimizer operations.
-        logits, train_optimizer, cross_entropy_loss= optimize(layer_output, correct_label, learning_rate, num_classes)
+        logits, train_op, cross_entropy_loss= optimize(layer_output, correct_label, learning_rate, num_classes)
         
         # TODO: Train NN using the train_nn function
         train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_loss, input_image,
