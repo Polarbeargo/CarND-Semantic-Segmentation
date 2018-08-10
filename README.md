@@ -1,6 +1,28 @@
 # Semantic Segmentation
-### Introduction
-In this project, you'll label the pixels of a road in images using a Fully Convolutional Network (FCN).
+### Model Architecture
+In this project, I labeled the pixels of a road in images using a Fully Convolutional Network (FCN). I use transfer learning from a pretrained VGG16 model. Kitti road dataset is used for training the model.
+
+[](./images/fcn_vgg.png)
+
+FCN model is based on a pretrained VGG-16 model include input layer, keep probability layer, layer 3, layer 4 and layer 7. Convolutional 1x1 of vgg layer 7 to mantain space information. layer 7 is connected to convolutional layer with kernel size = 1 and then Upsample deconvolution x 2 with kernel = 4, stride = 2. 1x1 convolution of vgg layer 4 is also connected to convolutional layer with kernel = 1. The above two output layers are summed up to form the first skip layer. The first skip layer is Upsample and connected to convolutional layer with kernel = 4 and stride = 2. The output of 1x1 convolution of vgg layer 3 connecting to convolutional layer with kernel = 1 summed up the above output layer form the second skip layer. The second skip layer is connected toUpsample deconvolution x 8 with kernel = 16, stride = 8 to form the final output layer. All convolution and deconvolution layer using kernel initializer with standard deviation 0.01 and L2 regularizer 0.001.    
+
+The inference results demonstrate the green regions as the road as below: The model architecture is as follow:
+    
+[](./images/semantic_segmentation.gif)    
+
+##### Optimizer
+  - Adam optimizer 
+  - Cross-entropy loss function.    
+  
+#### Hyperparameter   
+Learning rate is fixed at 0.0001 and keep probability is set to 50%.
+    
+#### Inference Result
+    
+[](./images/1.png)    
+[](./images/2.png)    
+[](./images/3.png)    
+[](./images/4.png)
 
 ### Setup
 ##### Frameworks and Packages
