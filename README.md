@@ -17,6 +17,8 @@ Make sure you have the following is installed:
  - [TensorFlow](https://www.tensorflow.org/)
  - [NumPy](http://www.numpy.org/)
  - [SciPy](https://www.scipy.org/)
+ - [Pillow](https://pillow.readthedocs.io/en/latest/)   
+ 
 ##### Dataset
 Download the [Kitti Road dataset](http://www.cvlibs.net/datasets/kitti/eval_road.php) from [here](http://www.cvlibs.net/download.php?file=data_road.zip).  Extract the dataset in the `data` folder.  This will create the folder `data_road` with all the training a test images.
 
@@ -62,10 +64,11 @@ The inference results demonstrate the green regions as the road as below:
   - Cross-entropy loss function.    
   
 #### Hyperparameter   
-Learning rate is fixed at 0.0001 and keep probability is set to 50%.
+Learning rate is fixed at 0.0001 and keep probability is set to 50%. Epochs to 50 and batch size = 5 to the inference result.
     
 #### Inference Result
-    
+The loss will near 0.01 after 50 epochs. The Infrence result as follow:   
+
 ![][image3]
 ![][image4]
 ![][image5]
