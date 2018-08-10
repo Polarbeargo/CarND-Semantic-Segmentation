@@ -1,0 +1,104 @@
+Starting training... for 50 epochs
+
+Loss: = 0.319
+
+Loss: = 0.149
+
+Loss: = 0.085
+
+Loss: = 0.093
+
+Loss: = 0.085
+
+Loss: = 0.099
+
+Loss: = 0.066
+
+Loss: = 0.069
+
+Loss: = 0.084
+
+Loss: = 0.048
+
+Loss: = 0.058
+
+Loss: = 0.073
+
+Loss: = 0.049
+
+Loss: = 0.046
+
+Loss: = 0.054
+
+Loss: = 0.038
+
+Loss: = 0.043
+
+Loss: = 0.024
+
+Loss: = 0.035
+
+Loss: = 0.048
+
+Loss: = 0.028
+
+Loss: = 0.077
+
+Loss: = 0.046
+
+Loss: = 0.055
+
+Loss: = 0.032
+
+Loss: = 0.039
+
+Loss: = 0.024
+
+Loss: = 0.031
+
+Loss: = 0.015
+
+Loss: = 0.028
+
+Loss: = 0.024
+
+Loss: = 0.017
+
+Loss: = 0.027
+
+Loss: = 0.025
+
+Loss: = 0.021
+
+Loss: = 0.015
+
+Loss: = 0.021
+
+Loss: = 0.020
+
+Loss: = 0.022
+
+Loss: = 0.014
+
+Loss: = 0.024
+
+Loss: = 0.017
+
+Loss: = 0.019
+
+Loss: = 0.020
+
+Loss: = 0.019
+
+Loss: = 0.019
+
+Loss: = 0.014
+
+Loss: = 0.012
+
+Loss: = 0.015
+
+Loss: = 0.016
+
+Training finished
+Training Finished. Saving test images to: ./runs/1533819906.1506617
